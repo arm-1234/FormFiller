@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FormFill</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 400px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+        }
+
+        .header {
+            background: white;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .container {
+            background: white;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .section {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .toggle-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .toggle-label {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .toggle {
+            position: relative;
+            width: 50px;
+            height: 26px;
+        }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.3s;
+            border-radius: 26px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: #4CAF50;
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(24px);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 10px;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+
+        .btn-secondary:hover {
+            background: #e9ecef;
+        }
+
+        .data-list {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .data-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            margin-bottom: 8px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        .data-key {
+            font-weight: 600;
+            color: #667eea;
+            margin-right: 8px;
+        }
+
+        .data-value {
+            color: #666;
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .data-copy {
+            color: #667eea;
+            cursor: pointer;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 16px;
+            margin-right: 4px;
+            transition: all 0.2s;
+        }
+
+        .data-copy:hover {
+            background: #eef2ff;
+            transform: scale(1.1);
+        }
+
+        .data-delete {
+            color: #dc3545;
+            cursor: pointer;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+
+        .data-delete:hover {
+            background: #dc3545;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .input-group {
+            margin-bottom: 12px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .status {
+            text-align: center;
+            padding: 12px;
+            background: #e7f5e9;
+            color: #2d6a3b;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        .status.inactive {
+            background: #ffeeba;
+            color: #856404;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 30px;
+            color: #999;
+            font-size: 13px;
+        }
+
+        .footer {
+            background: #f8f9fa;
+            padding: 12px 20px;
+            text-align: center;
+            font-size: 11px;
+            color: #666;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h1>🚀 FormFill</h1>
+        <p>Auto-fill job applications</p>
+    </div>
+
+    <div class="container">
+        <!-- Status Section -->
+        <div class="section">
+            <div id="status" class="status">
+                ✓ Ready to fill forms
+            </div>
+
+            <div class="toggle-container">
+                <span class="toggle-label">Auto-Fill Forms</span>
+                <label class="toggle">
+                    <input type="checkbox" id="autoFillToggle" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <button class="btn btn-primary" id="fillNowBtn">Fill Form Now</button>
+        </div>
+
+        <!-- Data Management Section -->
+        <div class="section">
+            <div class="section-title">Your Data</div>
+
+            <div id="dataList" class="data-list">
+                <div class="empty-state">No data stored yet</div>
+            </div>
+
+            <div class="input-group" style="margin-top: 15px;">
+                <label>Key</label>
+                <input type="text" id="newKey" placeholder="e.g., email, phone, address">
+            </div>
+
+            <div class="input-group">
+                <label>Value</label>
+                <input type="text" id="newValue" placeholder="Your information">
+            </div>
+
+            <button class="btn btn-primary" id="addDataBtn">Add Field</button>
+            <button class="btn btn-secondary" id="clearAllBtn">Clear All Data</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        FormFill v1.0 - Case-insensitive matching
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+
+</html>

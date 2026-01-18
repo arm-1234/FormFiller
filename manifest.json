@@ -1,0 +1,39 @@
+{
+    "manifest_version": 3,
+    "name": "FormFiller",
+    "version": "1.0.0",
+    "description": "Automatically fill job application forms with your stored data using intelligent field matching",
+    "permissions": [
+        "storage",
+        "activeTab",
+        "scripting"
+    ],
+    "host_permissions": [
+        "<all_urls>"
+    ],
+    "action": {
+        "default_popup": "popup.html",
+        "_comment_1": "TOOLBAR ICON - Change icon paths here",
+        "default_icon": {
+            "16": "icons/form.png",
+            "48": "icons/form2.png",
+            "128": "icons/survey.png"
+        }
+    },
+    "background": {
+        "service_worker": "background.js"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                "field-matcher.js",
+                "content.js"
+            ],
+            "run_at": "document_idle",
+            "all_frames": true
+        }
+    ]
+}
