@@ -1,4 +1,4 @@
-# 🚀 Job-FormFiller Extension
+# 🚀 FormFiller Extension
 
 **Empower your job search.** a  browser extension that automatically fills job application forms on ANY website (LinkedIn, Indeed, Naukri, etc.).
 
